@@ -86,18 +86,19 @@ public class GameConsole {
 		ServerSocket serverSocket=null;
 		try{
 			serverSocket=new ServerSocket(ONLINE_GAME_SEVER_PORT);
-			Socket socket=serverSocket.accept();
-			new clientServerThread(socket).start();
-			
+			while(true){
+				Socket socket=serverSocket.accept();
+				new clientServerThread(socket).start();
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-				if(serverSocket!=null){
+			/*	if(serverSocket!=null){
 					try{
 					serverSocket.close();}
 					catch(Exception e){e.printStackTrace();}
 				}
-						
+		*/				
 		}
 		
 	}
@@ -135,7 +136,7 @@ public class GameConsole {
 						// Enter rouds
 						dataOut.writeUTF("Enter rounds to play.");
 						// Read player option for round
-						int rounds= datain.readInt();
+						int rounds= Integer.parseInt(datain.readUTF());
 						String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
 						
 						Player player=new Player(name, ip,socket);
@@ -146,7 +147,7 @@ public class GameConsole {
 							game.play();
 						}
 						
-						socket.close();
+			//			socket.close();
 						
 						
 				}else if(gameSelection.equalsIgnoreCase("T")){
@@ -158,10 +159,10 @@ public class GameConsole {
 				e.printStackTrace();
 			}finally{
 				try{
-					if(datain !=null)
+				/*	if(datain !=null)
 						datain.close();
 					if(dataOut!=null)
-						dataOut.close();
+						dataOut.close();*/
 				}catch(Exception e){
 					e.printStackTrace();
 				}

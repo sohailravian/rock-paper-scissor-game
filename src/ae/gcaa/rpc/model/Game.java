@@ -32,15 +32,15 @@ public abstract class Game {
 	
 
 	public boolean roundsCompleted(){
-		return rounds.size() < totalRounds;
+		return rounds.size() >= totalRounds;
 	}
 	
 	public void play() throws IOException{
 		this.setGameState(GameState.STARTED);
 	}
-	public void finish(Socket socket) throws IOException{
+	public void finish() throws IOException{
 		this.setGameState(GameState.ENDED);
-		socket.close();
+	//	socket.close();
 	}
 	
 	public String submissionOptionMessage(){
@@ -58,6 +58,9 @@ public abstract class Game {
 				
 		return builder.toString();
 	} 
+	
+	
+	protected abstract void announceWinnerInCaseofQuit();
 	
 	public GameState getGameState() {
 		return gameState;
