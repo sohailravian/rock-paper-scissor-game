@@ -52,51 +52,65 @@ public class IndividualGame extends Game {
 			
 			IndividualRound round= new IndividualRound();
 			
-			
-			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.READ, playerTwo, playerOne.getName() + "'s Turn "));
+			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, playerTwo, "Please enter your choice."));
 			playerTwoOutput.flush();
 			
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, playerOne, submissionOptionMessage()));
+			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, playerOne, "Please enter your choice."));
 			playerOneOutput.flush();
 			
+			boolean plaerOneTookTurn=false;
+			boolean plaerTwoTookTurn=false;
 			
-			Message playerOneSubmission = MessageFactory.createMessage(playerOneInput.readUTF()); // Reading from System.in
-			//String input=br.readLine();
-			if(!Submission.isQuited(playerOneSubmission.getBody())){
-				playerOne.setQuit(true);
-				break;
-			}
+			while(!plaerOneTookTurn && !plaerTwoTookTurn){
 			
-			while(!Submission.isValidSubmission(playerOneSubmission.getBody())){
-			//	System.out.println("not a valid option try again.");
-				playerOneOutput.writeUTF("not a valid option try again.");
-				playerOneSubmission=MessageFactory.createMessage(playerOneInput.readUTF()); // Reading from System.in;
+				Message playerOneSubmission = MessageFactory.createMessage(playerOneInput.readUTF()); // Reading from System.in
+				while(true){
+				
+					//String input=br.readLine();
+					if(Submission.isQuited(playerOneSubmission.getBody())){
+						playerOne.setQuit(true);
+						break;
+					}
+					
+					if(Submission.isValidSubmission(playerOneSubmission.getBody())){
+					//	System.out.println("not a valid option try again.");
+						playerOne.takeTurn(Submission.valueOf(playerOneSubmission.getBody().toUpperCase().trim()));
+						plaerOneTookTurn=true;
+						break;
+					}
+					
+					playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, playerOne, "not a valid option try again."));
+					playerOneSubmission=MessageFactory.createMessage(playerOneInput.readUTF()); // Reading from client
+					
+				}
+				
+				//Player two waiting
+				Message playerTwoSubmission = MessageFactory.createMessage(playerTwoInput.readUTF()); // Reading from System.in
+				while(true){
+				
+					//String input=br.readLine();
+					if(Submission.isQuited(playerTwoSubmission.getBody())){
+						playerTwo.setQuit(true);
+						break;
+					}
+					
+					if(Submission.isValidSubmission(playerTwoSubmission.getBody())){
+					//	System.out.println("not a valid option try again.");
+						playerOne.takeTurn(Submission.valueOf(playerTwoSubmission.getBody().toUpperCase().trim()));
+						plaerTwoTookTurn=true;
+						break;
+					}
+					
+					playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, playerTwo, "not a valid option try again."));
+					playerTwoSubmission=MessageFactory.createMessage(playerOneInput.readUTF()); // Reading from client
+					
+				}
+				
+				
 			}
-			playerOne.takeTurn(Submission.valueOf(playerOneSubmission.getBody().toUpperCase().trim()));
 			
 					
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.READ, playerOne, playerTwo.getName() + "'s Turn "));
-			playerOneOutput.flush();
-			
-			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, playerTwo, submissionOptionMessage()));
-			playerTwoOutput.flush();
-			
-			
-			Message playerTwoSubmission = MessageFactory.createMessage(playerTwoInput.readUTF()); // Reading from System.in
-			//String input=br.readLine();
-			if(!Submission.isQuited(playerTwoSubmission.getBody())){
-				playerOne.setQuit(true);
-				break;
-			}
-			
-			while(!Submission.isValidSubmission(playerTwoSubmission.getBody())){
-			//	System.out.println("not a valid option try again.");
-				playerTwoOutput.writeUTF("not a valid option try again.");
-				playerTwoSubmission=MessageFactory.createMessage(playerTwoInput.readUTF()); // Reading from System.in;
-			}
-			playerTwo.takeTurn(Submission.valueOf(playerTwoSubmission.getBody().toUpperCase().trim()));
-			
-			
+		
 			nextRound(round);
 			
 		}
@@ -137,8 +151,8 @@ public class IndividualGame extends Game {
 	public void finish() throws Exception {
 		super.finish();
 		
-		DataOutputStream playerOneOutput=(DataOutputStream) this.getPlayerOne().getSocket().getOutputStream();
-		DataOutputStream playerTwoOutput=(DataOutputStream) this.getPlayerTwo().getSocket().getOutputStream();
+		DataOutputStream playerOneOutput=new DataOutputStream(playerOne.getSocket().getOutputStream());
+		DataOutputStream playerTwoOutput=new DataOutputStream(playerTwo.getSocket().getOutputStream());
 	
 		Participant participant=announceChampionOfAllRounds();
 		
@@ -176,11 +190,12 @@ public class IndividualGame extends Game {
 	
 	try{
 			if(getPlayerOne().isQuit()){
-				playerOneOut.writeUTF("Winner is "+ playerTwo.getName());
-				playerTwoOut.writeUTF("Winner is "+ playerTwo.getName());
-			}if(getPlayerTwo().isQuit()){
-				playerOneOut.writeUTF("Winner is "+ playerOne.getName());
-				playerTwoOut.writeUTF("Winner is "+ playerOne.getName());
+				
+				playerOneOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, "Winner is "+ playerTwo.getName()));
+				playerTwoOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, "Winner is "+ playerTwo.getName()));
+			}else{
+				playerOneOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, "Winner is "+ playerOne.getName()));
+				playerTwoOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, "Winner is "+ playerOne.getName()));
 			}
 			
 		//	playerTwoOutput.

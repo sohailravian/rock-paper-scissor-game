@@ -14,10 +14,10 @@ import ae.gcaa.rpc.model.Player;
 
 public class GameConsole {
 	
-	public static List<GamePooledParticipant> registeredParticipants= new ArrayList<GamePooledParticipant>();
+	public static volatile List<GamePooledParticipant> registeredParticipants= new ArrayList<GamePooledParticipant>();
 	private static final int ONLINE_GAME_SEVER_PORT=3333;
 	
-	public static Participant gameStartParticipant(Participant participant,int noOfRounds){
+	public Participant gameStartParticipant(Participant participant,int noOfRounds){
 		
 		Participant pooledParticipant=null;
 		for (GamePooledParticipant registeredParticipant : registeredParticipants) {
@@ -38,7 +38,7 @@ public class GameConsole {
 	}
 	
 	
-	public static class GamePooledParticipant{
+	public class GamePooledParticipant{
 		
 		private Participant participant;
 		private int noOfRounds;
@@ -86,19 +86,27 @@ public class GameConsole {
 		ServerSocket serverSocket=null;
 		try{
 			serverSocket=new ServerSocket(ONLINE_GAME_SEVER_PORT);
+			GameConsole console=new GameConsole();
 			while(true){
 				Socket socket=serverSocket.accept();
-				new clientServerThread(socket).start();
+				console.startNewThread(socket);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-				
+				try{
+				if(serverSocket!=null)
+					serverSocket.close();
+				}catch(Exception exception){exception.printStackTrace();}
 		}
 		
 	}
 	
-	public static class clientServerThread extends Thread{
+	public void startNewThread(Socket socket){
+		new clientServerThread(socket).start();
+	}
+	
+	public class clientServerThread extends Thread{
 		
 		private Socket socket;
 		public clientServerThread(Socket socket){

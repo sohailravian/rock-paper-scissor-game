@@ -9,8 +9,8 @@ public class Participant implements Serializable{
 	
 	private static final long serialVersionUID = -764363727531030443L;
 
-	private String name;
-	private String ip;
+	protected String name;
+	protected String ip;
 
 	protected int winCount;
 	protected boolean quit=false;
@@ -21,6 +21,7 @@ public class Participant implements Serializable{
 	protected Participant(String name,String ip,Socket socket){
 		this.setSocket(socket);
 		this.setName(name);
+		this.setIp(ip);
 		
 	}
 	
@@ -63,6 +64,12 @@ public class Participant implements Serializable{
 	}
 	
 	
+	public static void main(String[] args) {
+		Participant player1=new Player("soh","127.0.0.1",null);
+		Player player2=new Player("soh","127.0.0.1",null);
+		System.out.println(player1.equals(player2));
+		
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -77,7 +84,7 @@ public class Participant implements Serializable{
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Participant))
 			return false;
 		Participant other = (Participant) obj;
 		if (ip == null) {
@@ -92,7 +99,6 @@ public class Participant implements Serializable{
 			return false;
 		return true;
 	}
-	
 
 
 	
