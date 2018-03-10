@@ -1,5 +1,6 @@
 package ae.gcaa.rpc.model;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public abstract class Game {
 	private List<Round> rounds; 
 	
 	
+	
 	protected Game(int rounds){
 		this.setGameState(GameState.STARTED);
 		this.setRounds(new ArrayList<Round>());
@@ -21,24 +23,24 @@ public abstract class Game {
 			//throw new IllegalArgumentException("Rounds should be odd so it will definelty give some reuslt. No use of wasting time in draw.");
 	}
 	
-	
 	public abstract void nextRound(Round round);
-	
-	public abstract Participant championOfAllRounds();
+	protected abstract void sendGameStartInstructionMessage(DataOutputStream participantOneOut,DataOutputStream participantTwoOut);
+	public abstract Participant announceChampionOfAllRounds();
+	protected abstract void announceWinnerInCaseofQuit(DataOutputStream participantOneOut,DataOutputStream participantTwoOut);
+
 	
 	protected boolean currentRoundTied(Round round){
 		return round.decideRoundResult(this);
 	}
 	
-
 	public boolean roundsCompleted(){
 		return rounds.size() >= totalRounds;
 	}
 	
-	public void play() throws IOException{
+	public void play() throws Exception{
 		this.setGameState(GameState.STARTED);
 	}
-	public void finish() throws IOException{
+	public void finish() throws Exception{
 		this.setGameState(GameState.ENDED);
 	//	socket.close();
 	}
@@ -58,9 +60,6 @@ public abstract class Game {
 				
 		return builder.toString();
 	} 
-	
-	
-	protected abstract void announceWinnerInCaseofQuit();
 	
 	public GameState getGameState() {
 		return gameState;

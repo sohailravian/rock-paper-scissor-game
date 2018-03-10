@@ -4,17 +4,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.ws.handler.MessageContext.Scope;
-
 public class Team extends Participant {
 	
+	private static final long serialVersionUID = -403097635755019382L;
 	private List<Player> players;
-	//private State teamState;
 	private int size;
 		
-	public Team(Socket socket) {
-		super(socket);
-		this.size=2;
+	public Team(String name,String ip,Socket socket) {
+		super(name,ip,socket);
+		this.size=1;
 		this.players=new ArrayList<Player>();
 	}
 	

@@ -1,4 +1,4 @@
-package ae.gcaa.rpc.socket;
+package ae.gcaa.rpc.server;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -78,7 +78,7 @@ public class GameConsole {
 		
 	//	game=new IndividualGame(player2Rounds,player1,player2);
 		
-		game.play();
+	//	game.play();
 			
 	}
 	
@@ -93,12 +93,7 @@ public class GameConsole {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			/*	if(serverSocket!=null){
-					try{
-					serverSocket.close();}
-					catch(Exception e){e.printStackTrace();}
-				}
-		*/				
+				
 		}
 		
 	}
@@ -112,10 +107,10 @@ public class GameConsole {
 		
 		@Override
 		public void run() {
-			//super.run();
 			Game game=null;
 			DataInputStream datain= null; 
 			DataOutputStream dataOut=null;
+			
 			try{
 				dataOut=new DataOutputStream(socket.getOutputStream());
 				
@@ -153,7 +148,8 @@ public class GameConsole {
 				}else if(gameSelection.equalsIgnoreCase("T")){
 					
 				}else{
-					dataOut.writeUTF("Invalid option. Please select I for individual game or T for team game");
+					dataOut.writeUTF("Invalid option. Please try to start game with valid option.");
+					dataOut.flush();
 				}
 			}catch(Exception e){
 				e.printStackTrace();

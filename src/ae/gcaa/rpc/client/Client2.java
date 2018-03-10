@@ -13,7 +13,7 @@ import ae.gcaa.rpc.infrastructure.MessageType;
 import ae.gcaa.rpc.model.Participant;
 import ae.gcaa.rpc.model.Player;
 
-public class Client {
+public class Client2 {
 	private static final int ONLINE_GAME_SEVER_PORT=3333;
 	private static final String ONLINE_GAME_SEVER_IP="localhost";
 	
