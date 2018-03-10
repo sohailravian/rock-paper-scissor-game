@@ -38,16 +38,25 @@ public class Client2{
 			dataOut.writeUTF(gameType);
 			dataOut.flush();
 			
-			// Plyer name
-			System.out.println(dataIn.readUTF());
+			
+			// Plyer name or invalid selection message
+			Message kickStartMessage= MessageFactory.createMessage(dataIn.readUTF());
+			while(kickStartMessage.getType().isInvalid()){
+				System.out.println(kickStartMessage.getBody());
+				dataOut.writeUTF(MessageFactory.createMessage(MessageType.READ, null, br.readLine()));
+				kickStartMessage=MessageFactory.createMessage(dataIn.readUTF());
+			}
+			
+			System.out.println(kickStartMessage.getBody());
 			name=br.readLine();
-			dataOut.writeUTF(name);
+			dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, name));
 			dataOut.flush();
 		
 			// Game round
-			System.out.println(dataIn.readUTF());
+			Message gameRounds= MessageFactory.createMessage(dataIn.readUTF());
+			System.out.println(gameRounds.getBody());
 			String input=br.readLine();
-			dataOut.writeUTF(input);
+			dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, input));
 			dataOut.flush();
 			
 			String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
@@ -72,7 +81,6 @@ public class Client2{
 						dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, participant, input));
 					}else if(readMessage.getType().isRead() || readMessage.getType().isDisplay()){
 						System.out.println(readMessage.getBody());
-						//dataOut.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, participant, "Message has been red"));
 					}
 				} // end of if for same user check
 				

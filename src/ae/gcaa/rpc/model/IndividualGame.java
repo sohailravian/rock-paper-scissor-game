@@ -112,8 +112,6 @@ public class IndividualGame extends Game {
 				
 			}
 			
-					
-		
 			nextRound(round);
 			
 		}
@@ -159,13 +157,17 @@ public class IndividualGame extends Game {
 	
 		Participant participant=announceChampionOfAllRounds();
 		
+		StringBuilder builder=new StringBuilder("**********************************************").append("\n");
 		//mean game ended in draw
 		if(participant==null){
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerOne, "Match is draw."));
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerTwo, "Match is draw."));
+			builder.append("************* Match is draw *************").append("\n");
+			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerOne, builder.toString()));
+			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerTwo, builder.toString()));
 		}else{
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, ((Player)participant).getName()+" won. Congratulation"));
-			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, ((Player)participant).getName()+" won. Congratulation"));
+			builder.append("*********** Winner is Mr. "+ ((Player)participant).getName() +" **************")
+			.append("**********************************************");
+			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, builder.toString()));
+			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo,builder.toString()));
 		}
 	}
 	
@@ -190,18 +192,21 @@ public class IndividualGame extends Game {
 	
 	@Override
 	protected void announceWinnerInCaseofQuit(DataOutputStream playerOneOut,DataOutputStream playerTwoOut) {
-	
+	StringBuilder builder=new StringBuilder("**********************************************").append("\n");
+		
 	try{
+			Player winner= null;
 			if(getPlayerOne().isQuit()){
-				
-				playerOneOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, "Winner is "+ playerTwo.getName()));
-				playerTwoOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, "Winner is "+ playerTwo.getName()));
+				winner=playerTwo;
 			}else{
-				playerOneOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, "Winner is "+ playerOne.getName()));
-				playerTwoOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, "Winner is "+ playerOne.getName()));
+				winner=playerOne;
 			}
 			
-		//	playerTwoOutput.
+			builder.append("*********** Winner is Mr. "+ winner.getName() +" **************").append("\n")
+			.append("**********************************************");
+			
+			playerOneOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, builder.toString()));
+			playerTwoOut.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, builder.toString()));
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -213,10 +218,10 @@ public class IndividualGame extends Game {
 		StringBuilder builder=new StringBuilder();
 		builder.append("************************************************* INDIVIDUAL GAME *****************************************************").append('\n')
 			   .append("**************** There are four options to select while playing the game and these are listed below *******************").append('\n')
-			   .append("1. ROCK").append('\n')
-			   .append("2. PAPER").append('\n')
-			   .append("3. SCISSOR").append('\n')
-			   .append("4. QUIT").append('\n')
+			   .append(Submission.ROCK.name()).append('\n')
+			   .append(Submission.PAPER.name()).append('\n')
+			   .append(Submission.SCISSORS.name()).append('\n')
+			   .append(Submission.QUIT.name()).append('\n')
 			   .append("*************** By Entering QUIT/Q player will be quiting the game and other player wil win.");
 		return builder.toString(); 
 	}

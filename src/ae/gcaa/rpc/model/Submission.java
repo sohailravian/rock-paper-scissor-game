@@ -3,7 +3,7 @@ package ae.gcaa.rpc.model;
 public enum Submission {
 	ROCK("R"),
 	PAPER("P"),
-	SCISSOR("S"),
+	SCISSORS("S"),
 	QUIT("Q");
 	
 	private String code;
@@ -19,8 +19,8 @@ public enum Submission {
 	
 	public static boolean isValidSubmission(String submission){
 		try{
-			Submission enteredSubmission= Submission.valueOf(submission);
-			if(ROCK.equals(enteredSubmission) || PAPER.equals(enteredSubmission)|| SCISSOR.equals(submission)){
+			Submission enteredSubmission= Submission.valueOf(submission.toUpperCase());
+			if(ROCK.equals(enteredSubmission) || PAPER.equals(enteredSubmission)|| SCISSORS.equals(submission)){
 				return true;
 			}
 		}catch(IllegalArgumentException e){

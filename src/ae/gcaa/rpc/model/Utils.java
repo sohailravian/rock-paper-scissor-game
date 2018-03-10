@@ -1,5 +1,6 @@
 package ae.gcaa.rpc.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -11,6 +12,7 @@ public class Utils {
 	
 	static{
 		OBJECT_MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		OBJECT_MAPPER.setSerializationInclusion(Include.NON_NULL);
 	}
 	
 	public static String convertMessageToJson(Message message) throws Exception{

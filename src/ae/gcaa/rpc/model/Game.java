@@ -1,8 +1,6 @@
 package ae.gcaa.rpc.model;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,19 +11,15 @@ public abstract class Game {
 	private int totalRounds;
 	private List<Round> rounds; 
 	
-	
-	
 	protected Game(int rounds){
 		this.setGameState(GameState.STARTED);
 		this.setRounds(new ArrayList<Round>());
 		this.setTotalRounds(rounds);
-		//if(rounds%2!=1)
-			//throw new IllegalArgumentException("Rounds should be odd so it will definelty give some reuslt. No use of wasting time in draw.");
 	}
 	
-	public abstract void nextRound(Round round);
+	protected abstract void nextRound(Round round);
 	protected abstract void sendGameStartInstructionMessage(DataOutputStream participantOneOut,DataOutputStream participantTwoOut);
-	public abstract Participant announceChampionOfAllRounds();
+	protected abstract Participant announceChampionOfAllRounds();
 	protected abstract void announceWinnerInCaseofQuit(DataOutputStream participantOneOut,DataOutputStream participantTwoOut);
 
 	
@@ -47,15 +41,17 @@ public abstract class Game {
 	
 	public String submissionOptionMessage(){
 		StringBuilder builder=new StringBuilder();
-		builder.append("Enter one of below options").append('\n').append("1. ROCK").append('\n').append("2. PAPER").append('\n').append("3. SCISSOR");
+		builder.append("Enter one of below options").append('\n').append("1. ROCK").append('\n').append("2. PAPER").append('\n').append("3. SCISSORS");
 		return builder.toString();
 	}
 	
+	/* This method is to show message to client to play as individual or team
+	 */
 	public static String gameSelectionMessage(){
 		StringBuilder builder=new StringBuilder();
 		builder.append(" ********************** This Game has two modes ************************").append('\n')
-			   .append(" 1. I which stands for individual").append('\n')
-			   .append(" 2. T which stands for team").append('\n')
+			   .append(GameMode.INDIVIDUAL.getCode()).append("  ->	Stands for individual.").append('\n')
+			   .append(GameMode.TEAM.getCode()).append("  ->	Stands for team.").append('\n')
 			   .append(" ***********************************************************************");
 				
 		return builder.toString();

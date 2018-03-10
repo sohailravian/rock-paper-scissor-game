@@ -10,9 +10,9 @@ public abstract class Round {
 	protected boolean winner(Submission playerOneSubmission,Submission playerTwoSubmission){
 		if(Submission.PAPER.equals(playerOneSubmission) && Submission.ROCK.equals(playerTwoSubmission)){
 			return true;
-		}else if(Submission.SCISSOR.equals(playerOneSubmission) && Submission.PAPER.equals(playerTwoSubmission)){
+		}else if(Submission.SCISSORS.equals(playerOneSubmission) && Submission.PAPER.equals(playerTwoSubmission)){
 			return true;
-		}else if(Submission.ROCK.equals(playerOneSubmission) && Submission.SCISSOR.equals(playerTwoSubmission)){
+		}else if(Submission.ROCK.equals(playerOneSubmission) && Submission.SCISSORS.equals(playerTwoSubmission)){
 			return true;
 		}
 		return false;
