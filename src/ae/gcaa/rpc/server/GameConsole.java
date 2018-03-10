@@ -17,11 +17,11 @@ public class GameConsole {
 	public static volatile List<GamePooledParticipant> registeredParticipants= new ArrayList<GamePooledParticipant>();
 	private static final int ONLINE_GAME_SEVER_PORT=3333;
 	
-	public Participant gameStartParticipant(Participant participant,int noOfRounds){
+	public Participant gameStartParticipant(Participant participator,int noOfRounds){
 		
 		Participant pooledParticipant=null;
 		for (GamePooledParticipant registeredParticipant : registeredParticipants) {
-			 if(registeredParticipant.getParticipant().getClass().equals(participant.getClass()) && registeredParticipant.getNoOfRounds() == noOfRounds){
+			 if(registeredParticipant.getParticipant().getClass().equals(participator.getClass()) && registeredParticipant.getNoOfRounds() == noOfRounds){
 				 pooledParticipant=registeredParticipant.getParticipant();
 				 //result=true;
 				 break;
@@ -31,7 +31,7 @@ public class GameConsole {
 		if(pooledParticipant!=null){
 			registeredParticipants.remove(pooledParticipant);
 		}else{
-			registeredParticipants.add(new GamePooledParticipant(participant,noOfRounds));
+			registeredParticipants.add(new GamePooledParticipant(participator,noOfRounds));
 		}
 		
 		return pooledParticipant;
@@ -88,8 +88,7 @@ public class GameConsole {
 			serverSocket=new ServerSocket(ONLINE_GAME_SEVER_PORT);
 			GameConsole console=new GameConsole();
 			while(true){
-				Socket socket=serverSocket.accept();
-				console.startNewThread(socket);
+				console.startNewThread(serverSocket.accept());
 			}
 		}catch(Exception e){
 			e.printStackTrace();

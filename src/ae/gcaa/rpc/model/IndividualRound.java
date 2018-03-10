@@ -22,11 +22,11 @@ public class IndividualRound extends Round {
 		Player playerOne=individualGame.getPlayerOne();
 		Player playerTwo=individualGame.getPlayerTwo();
 		
-		Submission player1Submission= playerOne.getSubmission();
-		Submission player2Submission= playerTwo.getSubmission();
+		Submission playerOneSubmission= playerOne.getSubmission();
+		Submission playerTwoSubmission= playerTwo.getSubmission();
 		
-		boolean firstPlayerWins= winner(player1Submission, player2Submission);
-		boolean secondPlayerWins= winner(player2Submission,player1Submission);
+		boolean firstPlayerWins= winner(playerOneSubmission, playerTwoSubmission);
+		boolean secondPlayerWins= winner(playerTwoSubmission,playerOneSubmission);
 		
 		if(!firstPlayerWins && !secondPlayerWins){
 			return false;

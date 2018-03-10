@@ -29,8 +29,8 @@ public abstract class Game {
 	protected abstract void announceWinnerInCaseofQuit(DataOutputStream participantOneOut,DataOutputStream participantTwoOut);
 
 	
-	protected boolean currentRoundTied(Round round){
-		return round.decideRoundResult(this);
+	protected boolean currentRoundTied(Round round,Game game){
+		return round.decideRoundResult(game);
 	}
 	
 	public boolean roundsCompleted(){

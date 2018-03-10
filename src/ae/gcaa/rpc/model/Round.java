@@ -7,12 +7,12 @@ public abstract class Round {
 	
 	protected abstract void roundCompletedSettlement(Participant participantOne, Participant participantTwo);
 	
-	protected boolean winner(Submission player1Submission,Submission player2Submission){
-		if(Submission.PAPER.equals(player1Submission) && Submission.ROCK.equals(player2Submission)){
+	protected boolean winner(Submission playerOneSubmission,Submission playerTwoSubmission){
+		if(Submission.PAPER.equals(playerOneSubmission) && Submission.ROCK.equals(playerTwoSubmission)){
 			return true;
-		}else if(Submission.SCISSOR.equals(player1Submission) && Submission.PAPER.equals(player2Submission)){
+		}else if(Submission.SCISSOR.equals(playerOneSubmission) && Submission.PAPER.equals(playerTwoSubmission)){
 			return true;
-		}else if(Submission.ROCK.equals(player1Submission) && Submission.SCISSOR.equals(player2Submission)){
+		}else if(Submission.ROCK.equals(playerOneSubmission) && Submission.SCISSOR.equals(playerTwoSubmission)){
 			return true;
 		}
 		return false;

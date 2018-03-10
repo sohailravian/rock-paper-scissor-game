@@ -21,7 +21,7 @@ public class IndividualGame extends Game {
 	
 	@Override
 	public void nextRound(Round round){
-		if(currentRoundTied(round)){
+		if(currentRoundTied(round,this)){
 			getRounds().add(round);
 		}
 	}
@@ -29,9 +29,9 @@ public class IndividualGame extends Game {
 	@Override
 	public Participant announceChampionOfAllRounds(){
 		if(getPlayerOne().getWinCount() > getPlayerTwo().getWinCount())
-			return getPlayerOne();
-		else if(getPlayerOne().getWinCount() < getPlayerTwo().getWinCount())
-			return getPlayerTwo();
+			return playerOne;
+		else if(playerOne.getWinCount() < getPlayerTwo().getWinCount())
+			return playerTwo;
 		return null;
 	}
 	
@@ -74,8 +74,10 @@ public class IndividualGame extends Game {
 					
 					if(Submission.isValidSubmission(playerOneSubmission.getBody())){
 					//	System.out.println("not a valid option try again.");
+						playerOne.setSubmission(Submission.valueOf(playerOneSubmission.getBody().toUpperCase().trim()));
 						playerOne.takeTurn(Submission.valueOf(playerOneSubmission.getBody().toUpperCase().trim()));
 						plaerOneTookTurn=true;
+						
 						break;
 					}
 					
@@ -96,7 +98,8 @@ public class IndividualGame extends Game {
 					
 					if(Submission.isValidSubmission(playerTwoSubmission.getBody())){
 					//	System.out.println("not a valid option try again.");
-						playerOne.takeTurn(Submission.valueOf(playerTwoSubmission.getBody().toUpperCase().trim()));
+						playerTwo.setSubmission(Submission.valueOf(playerTwoSubmission.getBody().toUpperCase().trim()));
+						playerTwo.takeTurn(Submission.valueOf(playerTwoSubmission.getBody().toUpperCase().trim()));
 						plaerTwoTookTurn=true;
 						break;
 					}
