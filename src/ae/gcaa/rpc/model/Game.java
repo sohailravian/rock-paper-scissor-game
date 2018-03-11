@@ -25,7 +25,7 @@ public abstract class Game {
 	public static String ENTER_ROUNDS=" Enter rounds to play. ";
 	public static String NEW_LINE="\n";
 	public static String EMPTY_LINE="============================================";
-	public static String MATCH_DRAW="********************* Match is draw *****************";
+	public static String MATCH_DRAW="********************* Match is draw :( *****************";
 	public static String WELCOME_NEXT_ROUND=" ************ Welcome to next round ";
 	
 	

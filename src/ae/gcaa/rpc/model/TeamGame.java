@@ -14,8 +14,8 @@ public class TeamGame extends Game {
 	private Team teamTwo;
 	
 	public static String ENTER_NAME= " Enter you team name. ";
-	public static String TEAM_WINNER="*********** Winning team is ";
-	public static String TEAM_ROUND_WINNER=" ========== Round winner is Team ";
+	public static String TEAM_WINNER="*********** Congratulations. Winning team is ";
+	public static String TEAM_ROUND_WINNER=" ========== Nice game. Round winner is Team ";
 	public static String CHAMPIONSHIP_CONFIRMATION=" Do you want to participate in championship ? ";
 	
 	public TeamGame(int rounds,Team teamOne,Team teamTwo){
@@ -157,8 +157,8 @@ public class TeamGame extends Game {
 		}else{
 			String winMessage=
 			Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,TeamGame.TEAM_WINNER, ((Team)participant).getName(),Game.NEW_LINE,Game.EMPTY_LINE);
-			teamOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamOne,winMessage));
-			teamTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamTwo,winMessage));
+			teamOneOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, teamOne,winMessage));
+			teamTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, teamTwo,winMessage));
 		}
 		
 	}
