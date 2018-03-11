@@ -3,6 +3,9 @@ package ae.gcaa.rpc.infrastructure;
 import ae.gcaa.rpc.model.Participant;
 import ae.gcaa.rpc.model.Utils;
 
+/* @author Sheikh Muhammmad Sohail
+ * @purpose to generate message converted into json or by json into object
+ **/
 public class MessageFactory {
 	
 	public static String createMessage(MessageType type, Participant participant,String contents) throws Exception{

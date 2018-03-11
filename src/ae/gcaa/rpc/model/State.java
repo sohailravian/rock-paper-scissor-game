@@ -1,6 +1,7 @@
 package ae.gcaa.rpc.model;
 
 public enum State{
+	
 	IDLE(0),
 	WAITING(1),
 	TURN(2),

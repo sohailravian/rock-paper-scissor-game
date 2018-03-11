@@ -6,6 +6,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import ae.gcaa.rpc.infrastructure.Message;
 
+
+/* @author  Sheikh Muhammad Sohail
+ * This class is utility class having static function. 
+ */
+
 public class Utils {
 	
 	private static final ObjectMapper OBJECT_MAPPER=new ObjectMapper();
@@ -27,6 +32,10 @@ public class Utils {
 		}
 		return builder.toString();
 		
+	}
+	
+	public static void printMessageToConsole(String message){
+		System.out.println(message);
 	}
 	
 	public static Message convertJsonToMessage(String json) throws Exception{

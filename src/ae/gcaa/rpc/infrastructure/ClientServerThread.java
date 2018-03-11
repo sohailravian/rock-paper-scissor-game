@@ -19,6 +19,7 @@ import ae.gcaa.rpc.model.Utils;
 
 /* This thread class start player/team thread
  * @argument constructor argument is socket connection on which player/team will communicate with server  
+ * @author Sheikh Muhammad Sohail
  */
 
 public class ClientServerThread extends Thread{

@@ -3,6 +3,11 @@ package ae.gcaa.rpc.infrastructure;
 import java.io.Serializable;
 import ae.gcaa.rpc.model.Participant;
 
+/* @purpose this class is used to send and receive message to server and client
+ * This is act as a meesage.
+ * @author Sheikh Muhammad Sohail
+ * 
+ **/
 public class Message implements Serializable {
 
 	private static final long serialVersionUID = 8674918511930494619L;
@@ -16,7 +21,6 @@ public class Message implements Serializable {
 	public Message(Participant participant,MessageType type){
 		this.setParticipant(participant);
 		this.setType(type);
-		//this.setCommand(command);
 	}
 	
 	public Participant getParticipant() {

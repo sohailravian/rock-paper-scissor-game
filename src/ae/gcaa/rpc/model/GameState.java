@@ -1,7 +1,7 @@
 package ae.gcaa.rpc.model;
 
 public enum GameState {
-	//INITIALIZING(0),
+
 	STARTED(0),
 	ENDED(1)
 	;
