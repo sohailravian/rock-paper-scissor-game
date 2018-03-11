@@ -59,8 +59,8 @@ public enum Submission {
 	
 	public static boolean isValidSubmission(String submission){
 		try{
-			Submission enteredSubmission= Submission.valueOf(submission.toUpperCase());
-			if(ROCK.equals(enteredSubmission) || PAPER.equals(enteredSubmission)|| SCISSORS.equals(submission)){
+			Submission enteredSubmission= Submission.valueOf(submission.toUpperCase() );
+			if(ROCK.equals(enteredSubmission) || PAPER.equals(enteredSubmission)|| SCISSORS.equals(submission) ||QUIT.equals(submission)){
 				return true;
 			}
 		}catch(IllegalArgumentException e){

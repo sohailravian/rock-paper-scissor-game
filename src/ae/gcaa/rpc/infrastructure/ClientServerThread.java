@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import ae.gcaa.rpc.model.Confirmation;
 import ae.gcaa.rpc.model.Game;
 import ae.gcaa.rpc.model.GameMode;
 import ae.gcaa.rpc.model.IndividualGame;
@@ -27,7 +28,8 @@ public class ClientServerThread extends Thread{
 	
 	public static volatile List<GamePooledParticipant> registeredParticipants= new ArrayList<GamePooledParticipant>();
 	
-
+	private static volatile List<GamePooledParticipant> championshipParticipant= new ArrayList<GamePooledParticipant>();
+	
 	
 	private Socket socket;
 	public ClientServerThread(Socket socket){
@@ -153,7 +155,7 @@ public class ClientServerThread extends Thread{
 		
 		/* Enter player name 
 		 */
-		dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, Utils.stringMessageBuilder(IndividualGame.WELCOME_TO_GAME + IndividualGame.NEW_LINE + TeamGame.ENTER_NAME)));
+		dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, Utils.stringMessageBuilder(TeamGame.WELCOME_TO_GAME + TeamGame.NEW_LINE + TeamGame.ENTER_NAME)));
 		dataOut.flush();
 		
 		/* Read Team name 
@@ -162,20 +164,43 @@ public class ClientServerThread extends Thread{
 		
 		/* Enter rounds
 		 */		
-		dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, Utils.stringMessageBuilder(IndividualGame.ENTER_ROUNDS)));
-		
+		dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, Utils.stringMessageBuilder(TeamGame.ENTER_ROUNDS)));
+		dataOut.flush();
 		
 		/* Read Team option for round 
 		*/
 		int rounds= Integer.parseInt(MessageFactory.createMessage(datain.readUTF()).getBody());
+	
+		
+		/* asking for championship
+		 */		
+		dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, Utils.stringMessageBuilder(TeamGame.CHAMPIONSHIP_CONFIRMATION,Confirmation.validOptions())));
+		dataOut.flush();
+		
+		String confirmation= MessageFactory.createMessage(datain.readUTF()).getBody().toUpperCase();
+		while(!Confirmation.isValidOption(confirmation)){
+			dataOut.writeUTF(MessageFactory.createMessage(MessageType.INVALID, null, Utils.stringMessageBuilder(" Please select valid options ", GameMode.validOptions())));
+			dataOut.flush();
+			confirmation=MessageFactory.createMessage(datain.readUTF()).getBody().toUpperCase();
+		}
+		
+		
 		String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
 		
+		
 		Team team=new Team(name, ip,socket);
-		
 		/* Start the game amongst two teams having same rounds and game type (Team)
-		 */
+		*/
 		
-		Team teamTwo= (Team) gameStartParticipant(team, rounds);
+		Team teamTwo=null;
+		
+		if(Confirmation.confirmationOfValue(confirmation).isYes()){
+			team.setInChampionship(true);
+			teamTwo=(Team) gameStartParticipantForChampionship(team, rounds);
+		}else{
+			teamTwo= (Team) gameStartParticipant(team, rounds);
+		}
+				
 		if(teamTwo!=null){
 			game=new TeamGame(rounds,team,teamTwo);
 			game.play();
@@ -204,6 +229,31 @@ public class ClientServerThread extends Thread{
 			registeredParticipants.remove(pooledParticipant);
 		}else{
 			registeredParticipants.add(new GamePooledParticipant(participator,noOfRounds));
+			return null;
+		}
+		
+		return pooledParticipant.getParticipant();
+	}
+	
+	/*	This method is check/add player to players pool. Whenever some player/team connects to server it will check for matching player
+	* from this pool to start game with.  
+	*/
+	
+	private Participant gameStartParticipantForChampionship(Participant participator,int noOfRounds){
+		
+		GamePooledParticipant pooledParticipant=null;
+		for (GamePooledParticipant registeredParticipant : championshipParticipant) {
+			 if(registeredParticipant.getParticipant().getClass().equals(participator.getClass()) && registeredParticipant.getNoOfRounds() == noOfRounds){
+				 pooledParticipant=registeredParticipant;
+				 //result=true;
+				 break;
+			 }
+		}
+		
+		if(pooledParticipant!=null){
+			championshipParticipant.remove(pooledParticipant);
+		}else{
+			championshipParticipant.add(new GamePooledParticipant(participator,noOfRounds));
 			return null;
 		}
 		

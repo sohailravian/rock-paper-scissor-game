@@ -1,6 +1,7 @@
 package ae.gcaa.rpc.model;
 
 import java.io.DataOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -11,19 +12,21 @@ import ae.gcaa.rpc.infrastructure.MessageType;
 
 public class TeamGame extends Game {
 
-	public TeamGame(int rounds,Team teamOne,Team teamTwo){
-		super(rounds);
-		this.setTeamOne(teamOne);
-		this.setTeamTwo(teamTwo);
-	}
-	
 	private Team teamOne;
 	private Team teamTwo;
 	
 	public static String ENTER_NAME= " Enter you team name. ";
 	public static String TEAM_WINNER="*********** Winning team is ";
 	public static String TEAM_ROUND_WINNER=" ========== Round winner is Team ";
+	public static String CHAMPIONSHIP_CONFIRMATION=" Do you want to participate in championship ? ";
 	
+	public TeamGame(int rounds,Team teamOne,Team teamTwo){
+		super(rounds);
+		this.setTeamOne(teamOne);
+		this.setTeamTwo(teamTwo);
+	}
+	
+
 	@Override
 	protected void nextRound(Round round) throws Exception {
 		if(currentRoundTied(round,this)){
@@ -155,7 +158,7 @@ public class TeamGame extends Game {
 			teamOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, teamTwo, drawMessage));
 		}else{
 			String winMessage=
-			Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_WINNER, ((Team)participant).getName(),Game.NEW_LINE,Game.EMPTY_LINE);
+			Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,TeamGame.TEAM_WINNER, ((Team)participant).getName(),Game.NEW_LINE,Game.EMPTY_LINE);
 			teamOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamOne,winMessage));
 			teamTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamTwo,winMessage));
 		}
