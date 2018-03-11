@@ -6,9 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
 import ae.gcaa.rpc.model.Game;
@@ -48,10 +46,10 @@ public class GameConsole {
 	
 	public Participant gameStartParticipant(Participant participator,int noOfRounds){
 		
-		Participant pooledParticipant=null;
+		GamePooledParticipant pooledParticipant=null;
 		for (GamePooledParticipant registeredParticipant : registeredParticipants) {
 			 if(registeredParticipant.getParticipant().getClass().equals(participator.getClass()) && registeredParticipant.getNoOfRounds() == noOfRounds){
-				 pooledParticipant=registeredParticipant.getParticipant();
+				 pooledParticipant=registeredParticipant;
 				 //result=true;
 				 break;
 			 }
@@ -63,7 +61,7 @@ public class GameConsole {
 			registeredParticipants.add(new GamePooledParticipant(participator,noOfRounds));
 		}
 		
-		return pooledParticipant;
+		return pooledParticipant.getParticipant();
 	}
 	
 	/* Class for creating pooled participant on the fly

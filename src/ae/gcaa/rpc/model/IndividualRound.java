@@ -1,5 +1,11 @@
 package ae.gcaa.rpc.model;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import ae.gcaa.rpc.infrastructure.MessageFactory;
+import ae.gcaa.rpc.infrastructure.MessageType;
+
 public class IndividualRound extends Round {
 	private Player winner;
 	private Player loser;
@@ -15,9 +21,13 @@ public class IndividualRound extends Round {
 		setLoser((Player)loser);
 	} 
 
-	public boolean decideRoundResult(Game game){
+	@Override
+	public boolean decideRoundResult(Game game) throws Exception{
 		
 		IndividualGame individualGame= (IndividualGame) game;
+		
+		DataOutputStream participantOneDataOutput=new DataOutputStream(individualGame.getPlayerOne().getSocket().getOutputStream()) ; 
+		DataOutputStream participantTwoDataOutput=new DataOutputStream(individualGame.getPlayerTwo().getSocket().getOutputStream()) ; 
 		
 		Player playerOne=individualGame.getPlayerOne();
 		Player playerTwo=individualGame.getPlayerTwo();
@@ -29,6 +39,12 @@ public class IndividualRound extends Round {
 		boolean secondPlayerWins= winner(playerTwoSubmission,playerOneSubmission);
 		
 		if(!firstPlayerWins && !secondPlayerWins){
+			StringBuilder sameRound= new StringBuilder("*******************************************").append("\n");
+			sameRound.append(" ********* Round is draw. Try again. ***********").append("\n")
+			.append("*******************************************");
+			participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, sameRound.toString()));
+			participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, sameRound.toString()));
+			
 			return false;
 		}
 		
@@ -37,6 +53,12 @@ public class IndividualRound extends Round {
 		}else{
 			roundCompletedSettlement(playerTwo, playerOne);
 		}
+		
+		StringBuilder sameRound= new StringBuilder("*******************************************").append("\n");
+		sameRound.append(" ****** Welcome to the next round. Round winner is Mr. "+ this.getWinner().name + "*********").append("\n")
+		.append("*******************************************");
+		participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, sameRound.toString()));
+		participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, sameRound.toString()));
 		
 		return true;
 	}

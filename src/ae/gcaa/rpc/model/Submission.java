@@ -1,15 +1,55 @@
 package ae.gcaa.rpc.model;
 
 public enum Submission {
-	ROCK("R"),
-	PAPER("P"),
-	SCISSORS("S"),
-	QUIT("Q");
+	
+	ROCK("R"){
+		public boolean isRock(){
+			return true;
+		}
+	},
+	PAPER("P"){
+		public boolean isPaper(){
+			return true;
+		}
+	},
+	SCISSORS("S"){
+		public boolean isScissors(){
+			return true;
+		}
+	},
+	QUIT("Q"){
+		public boolean isQuit(){
+			return true;
+		}
+	},
+	UNKNOWN("U"){
+		public boolean isUnknown(){
+			return true;
+		}
+	};
 	
 	private String code;
 	private Submission(String code){
 		this.setCode(code);
 	}
+	
+	
+	public boolean isRock(){
+		return false;
+	}
+	public boolean isPaper(){
+		return false;
+	}
+	public boolean isScissors(){
+		return false;
+	}
+	public boolean isQuit(){
+		return false;
+	}
+	public boolean isUnknown(){
+		return false;
+	}
+	
 	public String getCode() {
 		return code;
 	}

@@ -11,6 +11,7 @@ import ae.gcaa.rpc.infrastructure.Message;
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
 import ae.gcaa.rpc.model.Player;
+import ae.gcaa.rpc.model.Submission;
 
 public class Client{
 	private static final int ONLINE_GAME_SEVER_PORT=3333;
@@ -64,16 +65,19 @@ public class Client{
 			Message readMessage=null;
 		//	String clientInput=
 			
-			while(!input.equalsIgnoreCase("quit")){
+			while(true){
 				System.out.println("Waiting...");
 				String message=dataIn.readUTF();
 				readMessage=MessageFactory.createMessage(message);
-				if(readMessage.getType().isWin() && readMessage.getType().isLose() && readMessage.getType().isDraw()){
+				if( input.equalsIgnoreCase(Submission.QUIT.name()) || readMessage.getType().isWin() || readMessage.getType().isLose() || readMessage.getType().isDraw()){
+					System.out.println(readMessage.getBody());
 					break;
-				}
+				}				
 				
-				//check if message is for same client
-				if(readMessage.getParticipant().equals(participant)){
+				else if(readMessage.getType().isDisplay()){
+					System.out.println(readMessage.getBody());
+				}		//check if message is for same client
+				else if(readMessage.getParticipant() !=null && readMessage.getParticipant().equals(participant)){
 					
 					if(readMessage.getType().isWrite()){
 						System.out.println(readMessage.getBody());
@@ -82,12 +86,13 @@ public class Client{
 					}else if(readMessage.getType().isRead() || readMessage.getType().isDisplay()){
 						System.out.println(readMessage.getBody());
 					}
-				} // end of if for same user check
+			} // end of if for same user check
+				
 				
 				
 			}
 			
-			System.out.println(readMessage.getBody());
+		//	
 			
 		}catch(Exception e){
 			System.out.println(e.getMessage());

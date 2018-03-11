@@ -1,9 +1,11 @@
 package ae.gcaa.rpc.model;
 
+import java.io.IOException;
+
 public abstract class Round {
 	protected Round(){}
 	
-	public abstract boolean decideRoundResult(Game game);
+	public abstract boolean decideRoundResult(Game game) throws Exception;
 	
 	protected abstract void roundCompletedSettlement(Participant participantOne, Participant participantTwo);
 	

@@ -1,11 +1,22 @@
 package ae.gcaa.rpc.model;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import ae.gcaa.rpc.infrastructure.Message;
+import ae.gcaa.rpc.infrastructure.MessageFactory;
+import ae.gcaa.rpc.infrastructure.MessageType;
 
 public abstract class Game {
 	
+	
+	private ExecutorService executor;
 	private String gameId;
 	private GameState gameState;
 	private int totalRounds;
@@ -15,15 +26,16 @@ public abstract class Game {
 		this.setGameState(GameState.STARTED);
 		this.setRounds(new ArrayList<Round>());
 		this.setTotalRounds(rounds);
+		this.executor=Executors.newCachedThreadPool();
 	}
 	
-	protected abstract void nextRound(Round round);
-	protected abstract void sendGameStartInstructionMessage(DataOutputStream participantOneOut,DataOutputStream participantTwoOut);
+	protected abstract void nextRound(Round round) throws Exception;
+	protected abstract void sendGameStartInstructionMessage(DataOutputStream participantOutput);
 	protected abstract Participant announceChampionOfAllRounds();
-	protected abstract void announceWinnerInCaseofQuit(DataOutputStream participantOneOut,DataOutputStream participantTwoOut);
+	protected abstract void announceWinnerInCaseofQuit(Participant participantOne,Participant participantTwo) throws Exception ;
 
 	
-	protected boolean currentRoundTied(Round round,Game game){
+	protected boolean currentRoundTied(Round round,Game game) throws Exception{
 		return round.decideRoundResult(game);
 	}
 	
@@ -57,6 +69,96 @@ public abstract class Game {
 		return builder.toString();
 	} 
 	
+	
+	public class ParticipantTurnThread implements Callable<Void>{
+		private Participant participant;
+		public ParticipantTurnThread(Participant participant){
+			this.setParticipant(participant);
+		}
+		
+		public Participant getParticipant() {
+			return participant;
+		}
+		public void setParticipant(Participant participant) {
+			this.participant = participant;
+		}
+
+		@Override
+		public Void call() throws Exception {
+			
+			DataOutputStream responseOutput=null;
+			DataInputStream responseInput=null;
+			try{
+				
+					responseOutput=new DataOutputStream(participant.getSocket().getOutputStream());
+					responseInput=new DataInputStream(participant.getSocket().getInputStream());
+					
+					responseOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, null, gameInstructionMessage()));
+					responseOutput.flush();
+					
+					responseOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, participant, "Please enter your choice."));
+					responseOutput.flush();
+					
+					Message submission = MessageFactory.createMessage(responseInput.readUTF()); // Reading from System.in
+					
+					/*synchronized (this) {
+						this.notify();
+					}
+					notify();*/
+					
+					while(true){
+						
+						String participantInput= submission.getBody().trim().toUpperCase();
+						
+						//String input=br.readLine();
+						if(Submission.isQuited(participantInput)){
+							participant.setQuit(true);
+							participant.takeTurn(Submission.valueOf(participantInput));
+							break;
+						}
+						
+						if(Submission.isValidSubmission(participantInput)){
+							participant.takeTurn(Submission.valueOf(participantInput));
+							break;
+						}
+						
+						responseOutput.writeUTF(MessageFactory.createMessage(MessageType.WRITE, participant, "not a valid option try again."));
+						submission=MessageFactory.createMessage(responseInput.readUTF()); // Reading from client
+					}
+				
+			}catch(Exception exception){
+				exception.printStackTrace();
+				throw new Exception(exception);
+			}finally{
+					try{
+						/*if(responseInput!=null){
+							responseInput.close();
+						}if(responseOutput!=null){
+							responseOutput.close();
+						}*/
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+			}
+			
+			return null;
+		}
+		
+	}
+	
+	
+	public String gameInstructionMessage(){
+		StringBuilder builder=new StringBuilder();
+		builder.append("************************************************* INDIVIDUAL GAME *****************************************************").append('\n')
+			   .append("**************** There are four options to select while playing the game and these are listed below *******************").append('\n')
+			   .append(Submission.ROCK.name()).append('\n')
+			   .append(Submission.PAPER.name()).append('\n')
+			   .append(Submission.SCISSORS.name()).append('\n')
+			   .append(Submission.QUIT.name()).append('\n')
+			   .append("*************** By Entering QUIT/Q player will be quiting the game and other player wil win.");
+		return builder.toString(); 
+	}
+	
 	public GameState getGameState() {
 		return gameState;
 	}
@@ -87,6 +189,14 @@ public abstract class Game {
 
 	public void setTotalRounds(int totalRounds) {
 		this.totalRounds = totalRounds;
+	}
+
+	public ExecutorService getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(ExecutorService executor) {
+		this.executor = executor;
 	}
 
 

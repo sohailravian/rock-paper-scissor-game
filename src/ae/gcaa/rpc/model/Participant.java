@@ -11,12 +11,15 @@ public class Participant implements Serializable{
 
 	protected String name;
 	protected String ip;
-
 	protected int winCount;
 	protected boolean quit=false;
 	
 	@JsonIgnore
+	protected Submission submission;
+	
+	@JsonIgnore
 	protected Socket socket;
+	
 	protected Participant(){};
 	protected Participant(String name,String ip,Socket socket){
 		this.setSocket(socket);
@@ -63,6 +66,18 @@ public class Participant implements Serializable{
 		this.ip = ip;
 	}
 	
+	public Submission getSubmission() {
+		return submission;
+	}
+
+	public void setSubmission(Submission submission) {
+		this.submission = submission;
+	}
+	
+	
+	public void takeTurn(Submission submission){
+		this.setSubmission(submission);
+	}
 	
 	public static void main(String[] args) {
 		Participant player1=new Player("soh","127.0.0.1",null);
