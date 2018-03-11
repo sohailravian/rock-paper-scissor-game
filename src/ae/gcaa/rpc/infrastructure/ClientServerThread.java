@@ -58,7 +58,7 @@ public class ClientServerThread extends Thread{
 				startIndividualGame(dataOut, datain, game);
 					
 			}else if(gameMode.isTeam()){
-				
+				startTeamGame(dataOut, datain, game);
 			}
 		}catch(Exception e){
 			e.printStackTrace();

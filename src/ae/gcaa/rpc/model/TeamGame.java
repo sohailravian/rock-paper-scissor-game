@@ -131,6 +131,38 @@ public class TeamGame extends Game {
 		
 	}
 	
+	/* This method will get winner of all the rounds
+	 **/
+	
+	@Override
+	public void finish() throws Exception {
+		super.finish();
+		
+		DataOutputStream teamOneOutput=new DataOutputStream(teamOne.getSocket().getOutputStream());
+		DataOutputStream teamTwoOutput=new DataOutputStream(teamTwo.getSocket().getOutputStream());
+	
+		/* This method will find out the winner of rounds
+		 */	
+		
+		Participant participant=announceChampionOfAllRounds();
+		
+		/* Sending Messages to competing players
+		 **/
+		
+		if(participant==null){
+			String drawMessage=Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,Game.MATCH_DRAW);
+			teamOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, teamOne, drawMessage));
+			teamOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, teamTwo, drawMessage));
+		}else{
+			String winMessage=
+			Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_WINNER, ((Team)participant).getName(),Game.NEW_LINE,Game.EMPTY_LINE);
+			teamOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamOne,winMessage));
+			teamTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamTwo,winMessage));
+		}
+		
+	}
+	
+	
 	public Team getTeamOne() {
 		return teamOne;
 	}
