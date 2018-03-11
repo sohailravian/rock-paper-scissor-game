@@ -1,7 +1,5 @@
 package ae.gcaa.rpc.model;
 
-import java.io.IOException;
-
 public abstract class Round {
 	protected Round(){}
 	

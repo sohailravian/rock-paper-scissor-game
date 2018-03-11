@@ -12,7 +12,7 @@ public class Participant implements Serializable{
 	protected String name;
 	protected String ip;
 	protected int winCount;
-	protected boolean quit=false;
+	protected boolean quit;
 	
 	@JsonIgnore
 	protected Submission submission;
@@ -25,6 +25,7 @@ public class Participant implements Serializable{
 		this.setSocket(socket);
 		this.setName(name);
 		this.setIp(ip);
+		this.setQuit(false);
 		
 	}
 	
@@ -78,13 +79,7 @@ public class Participant implements Serializable{
 	public void takeTurn(Submission submission){
 		this.setSubmission(submission);
 	}
-	
-	public static void main(String[] args) {
-		Participant player1=new Player("soh","127.0.0.1",null);
-		Player player2=new Player("soh","127.0.0.1",null);
-		System.out.println(player1.equals(player2));
-		
-	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

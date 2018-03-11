@@ -1,8 +1,6 @@
 package ae.gcaa.rpc.model;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
-
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
 

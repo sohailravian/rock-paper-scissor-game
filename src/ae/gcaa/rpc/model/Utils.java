@@ -19,6 +19,16 @@ public class Utils {
 		return getObjectMapper().writeValueAsString(message);
 	}
 	
+	
+	public static String stringMessageBuilder(String ... args){
+		StringBuilder builder=new StringBuilder();
+		for (int i = 0; i < args.length; i++) {
+			builder.append(args[i]);
+		}
+		return builder.toString();
+		
+	}
+	
 	public static Message convertJsonToMessage(String json) throws Exception{
 		return getObjectMapper().readValue(json, Message.class);
 	}

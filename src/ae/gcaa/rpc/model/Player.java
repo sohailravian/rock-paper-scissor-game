@@ -2,8 +2,6 @@ package ae.gcaa.rpc.model;
 
 import java.net.Socket;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Player extends Participant {
 	
 	private static final long serialVersionUID = -8126232631530147375L;

@@ -1,15 +1,9 @@
 package ae.gcaa.rpc.model;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-
-import ae.gcaa.rpc.infrastructure.Message;
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
 
@@ -17,6 +11,8 @@ public class IndividualGame extends Game {
 	
 	private Player playerOne;
 	private Player playerTwo;
+	
+	public static String ENTER_NAME= " Enter you name. ";
 
 	public IndividualGame(int rounds,Player playerOne,Player playerTwo){
 		super(rounds);
@@ -50,6 +46,7 @@ public class IndividualGame extends Game {
 			while(!roundsCompleted()){
 				
 				IndividualRound round= new IndividualRound();
+						
 				while(this.playerOne.getSubmission().isUnknown() && this.playerTwo.getSubmission().isUnknown()){
 				
 					Callable<Void> playerOneFuture = new ParticipantTurnThread(playerOne);
@@ -57,14 +54,7 @@ public class IndividualGame extends Game {
 						
 					List<Callable<Void>> futures= Arrays.asList(playerOneFuture,playerTwoFuture);
 					getExecutor().invokeAll(futures);
-					/*playerOneFuture.start();
-					playerOneFuture.join();
-					playerTwoFuture.start();*/
-					
-				/*	synchronized (this) {
-					    this.wait();
-					}*/ 
-					
+	
 					if(playerOne.isQuit() || playerTwo.isQuit()){
 						announceWinnerInCaseofQuit(this.playerOne,this.playerTwo);
 						break;

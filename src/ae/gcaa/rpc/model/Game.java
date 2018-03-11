@@ -2,13 +2,11 @@ package ae.gcaa.rpc.model;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import ae.gcaa.rpc.infrastructure.Message;
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
@@ -21,6 +19,11 @@ public abstract class Game {
 	private GameState gameState;
 	private int totalRounds;
 	private List<Round> rounds; 
+	
+	public static String WELCOME_TO_GAME="********** Welcome to the Game *****************";
+	public static String ENTER_ROUNDS=" Enter rounds to play. ";
+	public static String NEW_LINE="\n";
+	
 	
 	protected Game(int rounds){
 		this.setGameState(GameState.STARTED);
@@ -146,16 +149,14 @@ public abstract class Game {
 		
 	}
 	
-	
 	public String gameInstructionMessage(){
 		StringBuilder builder=new StringBuilder();
-		builder.append("************************************************* INDIVIDUAL GAME *****************************************************").append('\n')
-			   .append("**************** There are four options to select while playing the game and these are listed below *******************").append('\n')
+		builder.append("**************** Below are four options ****************").append('\n')
 			   .append(Submission.ROCK.name()).append('\n')
 			   .append(Submission.PAPER.name()).append('\n')
 			   .append(Submission.SCISSORS.name()).append('\n')
 			   .append(Submission.QUIT.name()).append('\n')
-			   .append("*************** By Entering QUIT/Q player will be quiting the game and other player wil win.");
+			   .append("*************** In case of QUITING the game other player wil win.");
 		return builder.toString(); 
 	}
 	

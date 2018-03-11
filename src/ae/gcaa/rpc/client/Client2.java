@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-
 import ae.gcaa.rpc.infrastructure.Message;
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
@@ -60,7 +59,7 @@ public class Client2{
 			dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, input));
 			dataOut.flush();
 			
-			String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
+			//String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
 			Player participant=new Player(name, ONLINE_GAME_SEVER_IP, socket);
 			Message readMessage=null;
 		//	String clientInput=
