@@ -14,6 +14,7 @@ import ae.gcaa.rpc.model.Submission;
 public class Client{
 	private static final int ONLINE_GAME_SEVER_PORT=3333;
 	private static final String ONLINE_GAME_SEVER_IP="127.0.0.1";
+	private static final String ONLINE_CIENT_IP="127.0.0.1";
 	
 	public static void main(String[] args) {
 		Socket socket=null;
@@ -59,7 +60,7 @@ public class Client{
 			dataOut.flush();
 			
 			//String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
-			Player participant=new Player(name, ONLINE_GAME_SEVER_IP, socket);
+			Player participant=new Player(name, ONLINE_CIENT_IP, socket);
 			Message readMessage=null;
 		//	String clientInput=
 			

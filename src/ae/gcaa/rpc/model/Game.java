@@ -23,6 +23,9 @@ public abstract class Game {
 	public static String WELCOME_TO_GAME="********** Welcome to the Game *****************";
 	public static String ENTER_ROUNDS=" Enter rounds to play. ";
 	public static String NEW_LINE="\n";
+	public static String EMPTY_STARS_LINE="************************************************";
+	public static String MATCH_DRAW="****************** Match is draw ***************";
+	
 	
 	
 	protected Game(int rounds){

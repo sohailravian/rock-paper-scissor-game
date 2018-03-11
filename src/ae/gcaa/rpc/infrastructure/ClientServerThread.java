@@ -159,6 +159,7 @@ public class ClientServerThread extends Thread{
 			registeredParticipants.remove(pooledParticipant);
 		}else{
 			registeredParticipants.add(new GamePooledParticipant(participator,noOfRounds));
+			return null;
 		}
 		
 		return pooledParticipant.getParticipant();

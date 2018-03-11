@@ -13,6 +13,8 @@ public class IndividualGame extends Game {
 	private Player playerTwo;
 	
 	public static String ENTER_NAME= " Enter you name. ";
+	public static String INDIVIDUAL_WINNER="*********** Winner is Mr. ";
+	
 
 	public IndividualGame(int rounds,Player playerOne,Player playerTwo){
 		super(rounds);
@@ -39,6 +41,9 @@ public class IndividualGame extends Game {
 		return null;
 	}
 	
+	/* Main method where game start between individual players 
+	 **/
+	
 	public void play() throws Exception {
 	
 		super.play();
@@ -47,6 +52,9 @@ public class IndividualGame extends Game {
 				
 				IndividualRound round= new IndividualRound();
 						
+				/* Waiting for players to enter their choice
+				 * */
+				
 				while(this.playerOne.getSubmission().isUnknown() && this.playerTwo.getSubmission().isUnknown()){
 				
 					Callable<Void> playerOneFuture = new ParticipantTurnThread(playerOne);
@@ -77,7 +85,11 @@ public class IndividualGame extends Game {
 		}catch(Exception e){
 			e.printStackTrace();
 			System.out.println("Game end abruptly. Please try to play a new game.");
-		}finally{
+		}
+		
+		/* After successfully completing all rounds, close the socket for individual clients
+		 **/
+		finally{
 			try{
 			 if(playerOne.getSocket()!=null) playerOne.getSocket().close();
 			 if(playerTwo.getSocket()!=null) playerTwo.getSocket().close();
@@ -90,6 +102,9 @@ public class IndividualGame extends Game {
 	};
 	
 	
+	/* This method will get winner of all the rounds
+	 **/
+	
 	@Override
 	public void finish() throws Exception {
 		super.finish();
@@ -97,19 +112,23 @@ public class IndividualGame extends Game {
 		DataOutputStream playerOneOutput=new DataOutputStream(playerOne.getSocket().getOutputStream());
 		DataOutputStream playerTwoOutput=new DataOutputStream(playerTwo.getSocket().getOutputStream());
 	
+		/* This method will find out the winner of rounds
+		 */	
+		
 		Participant participant=announceChampionOfAllRounds();
 		
-		StringBuilder builder=new StringBuilder("**********************************************").append("\n");
-		//mean game ended in draw
+		/* Sending Messages to competing players
+		 **/
+		
 		if(participant==null){
-			builder.append("************* Match is draw *************").append("\n");
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerOne, builder.toString()));
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerTwo, builder.toString()));
+			String drawMessage=Utils.stringMessageBuilder(Game.EMPTY_STARS_LINE,Game.NEW_LINE,Game.MATCH_DRAW);
+			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerOne, drawMessage));
+			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerTwo, drawMessage));
 		}else{
-			builder.append("*********** Winner is Mr. "+ ((Player)participant).getName() +" **************")
-			.append("**********************************************");
-			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, builder.toString()));
-			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo,builder.toString()));
+			String winMessage=
+			Utils.stringMessageBuilder(Game.EMPTY_STARS_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_WINNER, ((Player)participant).getName(),Game.NEW_LINE,Game.EMPTY_STARS_LINE);
+			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne,winMessage));
+			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo,winMessage));
 		}
 		
 	}
