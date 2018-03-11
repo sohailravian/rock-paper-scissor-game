@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import ae.gcaa.rpc.infrastructure.Message;
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
@@ -25,6 +26,7 @@ public abstract class Game {
 	public static String NEW_LINE="\n";
 	public static String EMPTY_LINE="============================================";
 	public static String MATCH_DRAW="********************* Match is draw *****************";
+	public static String WELCOME_NEXT_ROUND=" ************ Welcome to next round ";
 	
 	
 	

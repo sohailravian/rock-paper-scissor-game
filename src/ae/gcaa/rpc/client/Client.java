@@ -12,11 +12,15 @@ import ae.gcaa.rpc.model.Player;
 import ae.gcaa.rpc.model.Submission;
 
 public class Client{
-	private static final int ONLINE_GAME_SEVER_PORT=3333;
-	private static final String ONLINE_GAME_SEVER_IP="127.0.0.1";
-	private static final String ONLINE_CIENT_IP="127.0.0.1";
-	
+
 	public static void main(String[] args) {
+		
+		int ONLINE_GAME_SEVER_PORT=3333;
+		String ONLINE_GAME_SEVER_IP="127.0.0.1";
+		String ONLINE_CIENT_IP="127.0.0.1";
+		
+		
+		
 		Socket socket=null;
 		DataInputStream dataIn=null;
 		DataOutputStream dataOut=null;

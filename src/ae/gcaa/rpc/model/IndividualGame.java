@@ -15,7 +15,8 @@ public class IndividualGame extends Game {
 	
 	public static String ENTER_NAME= " Enter you name. ";
 	public static String INDIVIDUAL_WINNER="=============== Winner is Mr. ";
-	public static String INDIVIDUAL_ROUND_WINNER=" ========== Welcome to the next round. Round winner is Mr. ";
+	public static String INDIVIDUAL_ROUND_WINNER=" ========== Round winner is Mr. ";
+	
 
 	public IndividualGame(int rounds,Player playerOne,Player playerTwo){
 		super(rounds);
@@ -158,7 +159,7 @@ public class IndividualGame extends Game {
 				winner=playerOne;
 			}
 			
-			String winMessage= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,TeamGame.TEAM_WINNER, winner.getName(), Game.NEW_LINE,Game.EMPTY_LINE);
+			String winMessage= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_WINNER, winner.getName(), Game.NEW_LINE,Game.EMPTY_LINE);
 			
 			participantOneOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, winMessage));
 			participantTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, winMessage));

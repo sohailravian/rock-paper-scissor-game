@@ -21,8 +21,8 @@ public class TeamGame extends Game {
 	private Team teamTwo;
 	
 	public static String ENTER_NAME= " Enter you team name. ";
-	public static String TEAM_WINNER="*********** Winning team is. ";
-	public static String TEAM_ROUND_WINNER=" ========== Welcome to the next round. Round winner is Team ";
+	public static String TEAM_WINNER="*********** Winning team is ";
+	public static String TEAM_ROUND_WINNER=" ========== Round winner is Team ";
 	
 	@Override
 	protected void nextRound(Round round) throws Exception {
