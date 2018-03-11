@@ -12,6 +12,8 @@ import ae.gcaa.rpc.model.GameMode;
 import ae.gcaa.rpc.model.IndividualGame;
 import ae.gcaa.rpc.model.Participant;
 import ae.gcaa.rpc.model.Player;
+import ae.gcaa.rpc.model.Team;
+import ae.gcaa.rpc.model.TeamGame;
 import ae.gcaa.rpc.model.Utils;
 
 /* This thread class start player/team thread
@@ -138,6 +140,49 @@ public class ClientServerThread extends Thread{
 		}
 		
 	}
+	
+	/**
+	 * This method will kick start the game amongst individual players 
+	 * @param dataOut
+	 * @param datain
+	 * @param game
+	 * @throws Exception
+	 */
+	
+	private void startTeamGame(DataOutputStream dataOut, DataInputStream datain,Game game) throws Exception{
+		
+		/* Enter player name 
+		 */
+		dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, Utils.stringMessageBuilder(IndividualGame.WELCOME_TO_GAME + IndividualGame.NEW_LINE + TeamGame.ENTER_NAME)));
+		dataOut.flush();
+		
+		/* Read Team name 
+	    */
+		String name=MessageFactory.createMessage(datain.readUTF()).getBody();
+		
+		/* Enter rounds
+		 */		
+		dataOut.writeUTF(MessageFactory.createMessage(MessageType.WRITE, null, Utils.stringMessageBuilder(IndividualGame.ENTER_ROUNDS)));
+		
+		
+		/* Read Team option for round 
+		*/
+		int rounds= Integer.parseInt(MessageFactory.createMessage(datain.readUTF()).getBody());
+		String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
+		
+		Team team=new Team(name, ip,socket);
+		
+		/* Start the game amongst two teams having same rounds and game type (Team)
+		 */
+		
+		Team teamTwo= (Team) gameStartParticipant(team, rounds);
+		if(teamTwo!=null){
+			game=new TeamGame(rounds,team,teamTwo);
+			game.play();
+		}
+		
+	}
+	
 	
 	
 	/*	This method is check/add player to players pool. Whenever some player/team connects to server it will check for matching player

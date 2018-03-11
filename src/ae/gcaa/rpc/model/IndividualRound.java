@@ -37,11 +37,9 @@ public class IndividualRound extends Round {
 		boolean secondPlayerWins= winner(playerTwoSubmission,playerOneSubmission);
 		
 		if(!firstPlayerWins && !secondPlayerWins){
-			StringBuilder sameRound= new StringBuilder("*******************************************").append("\n");
-			sameRound.append(" ********* Round is draw. Try again. ***********").append("\n")
-			.append("*******************************************");
-			participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, sameRound.toString()));
-			participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, sameRound.toString()));
+			String sameRound= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,Game.MATCH_DRAW,Game.NEW_LINE); 
+			participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, sameRound));
+			participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, sameRound));
 			
 			return false;
 		}
@@ -52,11 +50,9 @@ public class IndividualRound extends Round {
 			roundCompletedSettlement(playerTwo, playerOne);
 		}
 		
-		StringBuilder sameRound= new StringBuilder("*******************************************").append("\n");
-		sameRound.append(" ****** Welcome to the next round. Round winner is Mr. "+ this.getWinner().name + "*********").append("\n")
-		.append("*******************************************");
-		participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, sameRound.toString()));
-		participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, sameRound.toString()));
+		String winnerRound= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_ROUND_WINNER,this.getWinner().name,Game.NEW_LINE); 
+		participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, winnerRound));
+		participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, winnerRound));
 		
 		return true;
 	}

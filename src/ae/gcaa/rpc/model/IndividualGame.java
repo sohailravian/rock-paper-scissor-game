@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+
 import ae.gcaa.rpc.infrastructure.MessageFactory;
 import ae.gcaa.rpc.infrastructure.MessageType;
 
@@ -13,8 +14,8 @@ public class IndividualGame extends Game {
 	private Player playerTwo;
 	
 	public static String ENTER_NAME= " Enter you name. ";
-	public static String INDIVIDUAL_WINNER="*********** Winner is Mr. ";
-	
+	public static String INDIVIDUAL_WINNER="=============== Winner is Mr. ";
+	public static String INDIVIDUAL_ROUND_WINNER=" ========== Welcome to the next round. Round winner is Mr. ";
 
 	public IndividualGame(int rounds,Player playerOne,Player playerTwo){
 		super(rounds);
@@ -46,7 +47,8 @@ public class IndividualGame extends Game {
 	
 	public void play() throws Exception {
 	
-		super.play();
+		this.setGameState(GameState.STARTED);
+		
 		try{
 			while(!roundsCompleted()){
 				
@@ -121,12 +123,12 @@ public class IndividualGame extends Game {
 		 **/
 		
 		if(participant==null){
-			String drawMessage=Utils.stringMessageBuilder(Game.EMPTY_STARS_LINE,Game.NEW_LINE,Game.MATCH_DRAW);
+			String drawMessage=Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,Game.MATCH_DRAW);
 			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerOne, drawMessage));
 			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DRAW, playerTwo, drawMessage));
 		}else{
 			String winMessage=
-			Utils.stringMessageBuilder(Game.EMPTY_STARS_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_WINNER, ((Player)participant).getName(),Game.NEW_LINE,Game.EMPTY_STARS_LINE);
+			Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_WINNER, ((Player)participant).getName(),Game.NEW_LINE,Game.EMPTY_LINE);
 			playerOneOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne,winMessage));
 			playerTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo,winMessage));
 		}
@@ -148,8 +150,6 @@ public class IndividualGame extends Game {
 		DataOutputStream participantOneOutput=new DataOutputStream(participantOne.getSocket().getOutputStream());
 		DataOutputStream participantTwoOutput=new DataOutputStream(participantTwo.getSocket().getOutputStream());
 		
-		StringBuilder builder=new StringBuilder("**********************************************").append("\n");
-		
 		try{
 			Player winner= null;
 			if(getPlayerOne().isQuit()){
@@ -158,11 +158,10 @@ public class IndividualGame extends Game {
 				winner=playerOne;
 			}
 			
-			builder.append("*********** Winner is Mr. "+ winner.getName() +" **************").append("\n")
-			.append("**********************************************");
+			String winMessage= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,TeamGame.TEAM_WINNER, winner.getName(), Game.NEW_LINE,Game.EMPTY_LINE);
 			
-			participantOneOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, builder.toString()));
-			participantTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, builder.toString()));
+			participantOneOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerOne, winMessage));
+			participantTwoOutput.writeUTF(MessageFactory.createMessage(MessageType.WIN, playerTwo, winMessage));
 			
 		}catch(Exception e){
 			e.printStackTrace();

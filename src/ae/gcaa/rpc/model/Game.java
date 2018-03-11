@@ -23,8 +23,8 @@ public abstract class Game {
 	public static String WELCOME_TO_GAME="********** Welcome to the Game *****************";
 	public static String ENTER_ROUNDS=" Enter rounds to play. ";
 	public static String NEW_LINE="\n";
-	public static String EMPTY_STARS_LINE="************************************************";
-	public static String MATCH_DRAW="****************** Match is draw ***************";
+	public static String EMPTY_LINE="============================================";
+	public static String MATCH_DRAW="********************* Match is draw *****************";
 	
 	
 	
@@ -39,6 +39,7 @@ public abstract class Game {
 	protected abstract void sendGameStartInstructionMessage(DataOutputStream participantOutput);
 	protected abstract Participant announceChampionOfAllRounds();
 	protected abstract void announceWinnerInCaseofQuit(Participant participantOne,Participant participantTwo) throws Exception ;
+	public abstract void play() throws Exception;
 
 	
 	protected boolean currentRoundTied(Round round,Game game) throws Exception{
@@ -48,10 +49,7 @@ public abstract class Game {
 	public boolean roundsCompleted(){
 		return rounds.size() >= totalRounds;
 	}
-	
-	public void play() throws Exception{
-		this.setGameState(GameState.STARTED);
-	}
+
 	public void finish() throws Exception{
 		this.setGameState(GameState.ENDED);
 	//	socket.close();
