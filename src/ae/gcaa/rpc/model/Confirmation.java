@@ -35,8 +35,8 @@ public enum Confirmation{
 	}
 	
 	public static boolean isValidOption(String mode){
-		if(Confirmation.YES.code.equalsIgnoreCase(mode))
-			return true;
+		//if(Confirmation.YES.code.equalsIgnoreCase(mode))
+			//return true;
 		if(Confirmation.NO.code.equalsIgnoreCase(mode))
 			return true;
 		
@@ -53,7 +53,8 @@ public enum Confirmation{
 	}
 	public static String validOptions() {
 		StringBuilder builder=new StringBuilder();
-		builder.append("[").append(Confirmation.YES.getCode()).append(",").append(Confirmation.NO.getCode()).append("]");
+		//builder.append("[").append(Confirmation.YES.getCode()).append(",").append(Confirmation.NO.getCode()).append("]");
+		builder.append("[").append(Confirmation.NO.getCode()).append("]");
 		return builder.toString();
 	}
 	

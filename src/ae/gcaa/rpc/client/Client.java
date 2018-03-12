@@ -13,7 +13,7 @@ import ae.gcaa.rpc.model.Submission;
 
 public class Client{
 
-	public static void main(String[] args) {
+	public static void notMain(String[] args) {
 		
 		int ONLINE_GAME_SEVER_PORT=3333;
 		String ONLINE_GAME_SEVER_IP="127.0.0.1";

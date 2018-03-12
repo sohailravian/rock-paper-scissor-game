@@ -180,7 +180,7 @@ public class ClientServerThread extends Thread{
 		
 		String confirmation= MessageFactory.createMessage(datain.readUTF()).getBody().toUpperCase();
 		while(!Confirmation.isValidOption(confirmation)){
-			dataOut.writeUTF(MessageFactory.createMessage(MessageType.INVALID, null, Utils.stringMessageBuilder(" Please select valid options ", GameMode.validOptions())));
+			dataOut.writeUTF(MessageFactory.createMessage(MessageType.INVALID, null, Utils.stringMessageBuilder(" Please select valid options ", Confirmation.validOptions())));
 			dataOut.flush();
 			confirmation=MessageFactory.createMessage(datain.readUTF()).getBody().toUpperCase();
 		}

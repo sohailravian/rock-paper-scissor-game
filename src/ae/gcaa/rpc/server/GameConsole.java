@@ -155,6 +155,8 @@ public class GameConsole {
 					
 					if(input.equalsIgnoreCase(Submission.QUIT.name()) || readMessage.getType().isWin() || readMessage.getType().isLose() || readMessage.getType().isDraw()){
 						printMessageToConsole(readMessage.getBody());
+						printMessageToConsole("press any key to exit");
+						br.readLine();
 						break;
 					}
 					
@@ -219,9 +221,10 @@ public class GameConsole {
 			dataOut.flush();
 			
 			
+		//	champioshionConfirmationMsg= MessageFactory.createMessage(dataIn.readUTF());
 			while(champioshionConfirmationMsg.getType().isInvalid()){
 				printMessageToConsole(champioshionConfirmationMsg.getBody());
-				dataOut.writeUTF(MessageFactory.createMessage(MessageType.READ, null, br.readLine()));
+				dataOut.writeUTF(MessageFactory.createMessage(MessageType.INVALID, null, br.readLine()));
 				champioshionConfirmationMsg=MessageFactory.createMessage(dataIn.readUTF());
 			}
 			
@@ -233,6 +236,8 @@ public class GameConsole {
 					readMessage=MessageFactory.createMessage(message);
 					if( input.equalsIgnoreCase(Submission.QUIT.name()) || readMessage.getType().isWin() || readMessage.getType().isLose() || readMessage.getType().isDraw()){
 						printMessageToConsole(readMessage.getBody());
+						printMessageToConsole("press any key to exit");
+						br.readLine();
 						break;
 					}				
 					
