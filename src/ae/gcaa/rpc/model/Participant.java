@@ -9,16 +9,16 @@ public class Participant implements Serializable{
 	
 	private static final long serialVersionUID = -764363727531030443L;
 
-	protected String name;
-	protected String ip;
-	protected int winCount;
-	protected boolean quit;
+	private String name;
+	private String ip;
+	private int winCount;
+	private boolean quit;
 	
 	@JsonIgnore
-	protected Submission submission;
+	private Submission submission;
 	
 	@JsonIgnore
-	protected Socket socket;
+	private Socket socket;
 	
 	protected Participant(){};
 	protected Participant(String name,String ip,Socket socket){

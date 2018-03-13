@@ -50,7 +50,7 @@ public class IndividualRound extends Round {
 			roundCompletedSettlement(playerTwo, playerOne);
 		}
 		
-		String winnerRound= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_ROUND_WINNER,this.getWinner().name,Game.NEW_LINE); 
+		String winnerRound= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,IndividualGame.INDIVIDUAL_ROUND_WINNER,this.getWinner().getName(),Game.NEW_LINE); 
 		participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerOne, winnerRound));
 		participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, playerTwo, winnerRound));
 		

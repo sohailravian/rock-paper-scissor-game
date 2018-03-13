@@ -51,7 +51,7 @@ public class TeamRound extends Round {
 			roundCompletedSettlement(teamTwo, teamOne);
 		}
 		
-		String winnerRound= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,TeamGame.TEAM_ROUND_WINNER,this.getWinner().name,Game.NEW_LINE);
+		String winnerRound= Utils.stringMessageBuilder(Game.EMPTY_LINE,Game.NEW_LINE,TeamGame.TEAM_ROUND_WINNER,this.getWinner().getName(),Game.NEW_LINE);
 		participantOneDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamOne, winnerRound));
 		participantTwoDataOutput.writeUTF(MessageFactory.createMessage(MessageType.DISPLAY, teamTwo, winnerRound));
 		
